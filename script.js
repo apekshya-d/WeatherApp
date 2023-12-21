@@ -46,3 +46,7 @@ function displayWeather(data) {
   </div>
   `;
 }
+
+getData("auto:ip").then((data) => {
+  displayWeather(data);
+});
