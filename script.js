@@ -1,3 +1,5 @@
+let unit = "metric";
+
 async function getData(city) {
   const response = await fetch(
     `https://api.weatherapi.com/v1/current.json?key=ec9d15cb0b4547a5b83232753232012&q=${city}`,
@@ -20,8 +22,7 @@ async function getData(city) {
   };
 }
 
-let cityNameForm = document.querySelector("form");
-
+const cityNameForm = document.querySelector("form");
 cityNameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   let cityNameInput = cityNameForm.querySelector("input");
@@ -32,19 +33,46 @@ cityNameForm.addEventListener("submit", async (e) => {
 
 function displayWeather(data) {
   let weatherDetails = document.querySelector(".weatherDetails");
+  let temp;
+  let windSpeed;
+  let feelsLike;
+  let tempUnit;
+  if (unit === "imperial") {
+    temp = data.tempF;
+    windSpeed = data.windMph;
+    feelsLike = data.feelsLikeF;
+    tempUnit = "℉";
+    speedUnit = "Mph";
+  } else if (unit === "metric") {
+    temp = data.tempC;
+    windSpeed = data.windKph;
+    feelsLike = data.feelsLikeC;
+    tempUnit = "℃";
+    speedUnit = "Kph";
+  }
   weatherDetails.innerHTML = `
   <h3>${data.location}</h3>
   <div>
     <img src="https:${data.icon}"/>
     <div>${data.description}</div>
-    <div>${data.tempC}℃</div>
+    <div>${temp}${tempUnit}</div>
   </div>
   <div>
-    <div>Feels like ${data.feelsLikeC}</div>
-    <div>Humidity: ${data.humidity}</div>
-    <div>Wind: ${data.windKph}</div>
+    <div>Feels like ${feelsLike}${tempUnit}</div>
+    <div>Humidity: ${data.humidity}%</div>
+    <div>Wind: ${windSpeed}${speedUnit}</div>
   </div>
+  <button>Unit</button>
   `;
+  const unitBtn = weatherDetails.querySelector("button");
+  unitBtn.addEventListener("click", () => {
+    if (unit === "metric") {
+      unit = "imperial";
+    } else {
+      unit = "metric";
+    }
+    displayWeather(data);
+  });
 }
 
 getData("auto:ip").then((data) => {
