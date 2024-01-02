@@ -51,16 +51,20 @@ function displayWeather(data) {
     speedUnit = "Kph";
   }
   weatherDetails.innerHTML = `
-  <h3>${data.location}</h3>
-  <div>
-    <img src="https:${data.icon}"/>
+  <h1>${data.location}</h1>
+  <div id="description">
     <div>${data.description}</div>
-    <div>${temp}${tempUnit}</div>
+    <img src="https:${data.icon}"/>
   </div>
-  <div>
-    <div>Feels like ${feelsLike}${tempUnit}</div>
-    <div>Humidity: ${data.humidity}%</div>
-    <div>Wind: ${windSpeed}${speedUnit}</div>
+  <div id="values">
+    <div>
+      <div id="temperature">${Math.round(temp)}<span>${tempUnit}</span></div>
+    </div>
+    <div id="others">
+      <div>Feels like ${Math.round(feelsLike)}${tempUnit}</div>
+      <div>Humidity: ${Math.round(data.humidity)}%</div>
+      <div>Wind: ${Math.round(windSpeed)}${speedUnit}</div>
+    </div>
   </div>
   <button>Unit</button>
   `;
